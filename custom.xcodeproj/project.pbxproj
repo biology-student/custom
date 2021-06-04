@@ -13,6 +13,8 @@
 		047A4E532663C11000EB617B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 047A4E522663C11000EB617B /* Preview Assets.xcassets */; };
 		047A4E552663C11000EB617B /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047A4E542663C11000EB617B /* Persistence.swift */; };
 		047A4E582663C11000EB617B /* custom.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 047A4E562663C11000EB617B /* custom.xcdatamodeld */; };
+		047A4E8B266735CD00EB617B /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047A4E8A266735CD00EB617B /* CalendarView.swift */; };
+		047A4E8E2667656900EB617B /* DayButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047A4E8D2667656900EB617B /* DayButtonView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,8 @@
 		047A4E542663C11000EB617B /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		047A4E572663C11000EB617B /* custom.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = custom.xcdatamodel; sourceTree = "<group>"; };
 		047A4E592663C11000EB617B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		047A4E8A266735CD00EB617B /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
+		047A4E8D2667656900EB617B /* DayButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayButtonView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +67,8 @@
 				047A4E592663C11000EB617B /* Info.plist */,
 				047A4E562663C11000EB617B /* custom.xcdatamodeld */,
 				047A4E512663C11000EB617B /* Preview Content */,
+				047A4E8A266735CD00EB617B /* CalendarView.swift */,
+				047A4E8D2667656900EB617B /* DayButtonView.swift */,
 			);
 			path = custom;
 			sourceTree = "<group>";
@@ -91,6 +97,8 @@
 			dependencies = (
 			);
 			name = custom;
+			packageProductDependencies = (
+			);
 			productName = custom;
 			productReference = 047A4E482663C10D00EB617B /* custom.app */;
 			productType = "com.apple.product-type.application";
@@ -118,6 +126,8 @@
 				Base,
 			);
 			mainGroup = 047A4E3F2663C10D00EB617B;
+			packageReferences = (
+			);
 			productRefGroup = 047A4E492663C10D00EB617B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -144,10 +154,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				047A4E8B266735CD00EB617B /* CalendarView.swift in Sources */,
 				047A4E552663C11000EB617B /* Persistence.swift in Sources */,
 				047A4E4E2663C10D00EB617B /* ContentView.swift in Sources */,
 				047A4E582663C11000EB617B /* custom.xcdatamodeld in Sources */,
 				047A4E4C2663C10D00EB617B /* customApp.swift in Sources */,
+				047A4E8E2667656900EB617B /* DayButtonView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
