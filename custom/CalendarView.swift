@@ -37,6 +37,13 @@ struct CalendarView: View {
         return data
     }
     
+    func getStartDate() -> Date{
+        if items.count != 0 {
+            return items[items.startIndex].timestamp!
+        }
+        return Date()
+    }
+    
     func getMaxElapsedDay() -> Int? {
         var elapsedDay:Int = 0
         if items.count != 0 {
@@ -87,7 +94,7 @@ struct CellColorModifier:ViewModifier {
     }
 }
 
-//縦一列分の表示
+//縦一列(１週間)分の表示
 struct WeekView: View {
     init(startIdx:Int, endIdx:Int, datas:[Int?]) {
         start = startIdx    //最初の日付(曜日)を入れる
@@ -108,7 +115,7 @@ struct WeekView: View {
 }
 
 
-//一月分の表示
+//一月分の表示→最初から最後まで表示させるように
 struct MonthView:View {
     @Environment(\.managedObjectContext) private var viewContext
 
