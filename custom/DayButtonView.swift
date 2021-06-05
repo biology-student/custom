@@ -19,58 +19,67 @@ struct DayButtonView: View {
     private var items: FetchedResults<Item>
     
     var body: some View {
-        VStack{
-            List {
-                ForEach(items) { item in
-                    Text("Item at \(dateFormat(date: item.timestamp!))\n ElapsedDay = \(item.elapsedDay)")
+        HStack{
+            if items.isEmpty == false {
+                let today = Date()
+                let lastDate = items[items.endIndex - 1].timestamp
+                if dateIsSame(date1: today, date2: lastDate!) {
+                    Text("Done")
+                        .font(.title)
+                        .frame(width: 100, height:60)
+                } else {
+                    Button(action: addItem){
+                        Text("Check")
+                            .frame(width: 100, height:60)
+                            .background(Color.green)
+                            .foregroundColor(Color.white)
+                            .font(.title)
+                            .cornerRadius(10)
+                    }
                 }
-                .onDelete(perform: deleteItems)
-            }
-            .frame(height: 400)
-            
-//            if items.isEmpty == false {
-//                let today = Date()
-//                let lastDate = items[items.endIndex - 1].timestamp
-//                if dateIsSame(date1: today, date2: lastDate!) {
-//                    Text("Done")
-//                } else {
-//                    Button(action: addItem){
-//                        Text("Check")
-//                            .font(.title)
-//                            .foregroundColor(Color.green)
-//                    }
-//                }
-//            } else {
+            } else {
                 Button(action: addItem){
                     Text("First Check")
+                        .frame(width: 210, height:60)
+                        .background(Color.green)
+                        .foregroundColor(Color.white)
                         .font(.title)
-                        .foregroundColor(Color.green)
+                        .cornerRadius(10)
                 }
-//            }
-            
-            Spacer()
+            }
+            if items.count != 0 {
+                let lastDate = items[items.endIndex - 1].timestamp!
+                let calendar = Calendar(identifier: .gregorian)
+                let diff = calendar.dateComponents([.hour], from: lastDate, to: Date()).hour!
+                if diff < 1{
+                    Button(action:deleteLastItem){
+                        Text("  Delete\nLastData")
+                            .frame(width: 100, height: 60)
+                            .background(Color.red)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }
+                }
+            }
         }
         
     }
 
     private func addItem() {
-        
         //素早く押すと同じ日付が登録されてしまうため、ここにも記載
-//        if items.isEmpty == false {
-//            let today = Date()
-//            let lastDate = items[items.endIndex - 1].timestamp
-//            if dateIsSame(date1: today, date2: lastDate!) {
-//                return
-//            }
-//        }
+        if items.isEmpty == false {
+            let today = Date()
+            let lastDate = items[items.endIndex - 1].timestamp
+            if dateIsSame(date1: today, date2: lastDate!) {
+                return
+            }
+        }
         
         withAnimation {
             let newItem = Item(context: viewContext)
             var elapsedDay:Int64 = 0
             if items.count != 0 {
-                var startDate = items[items.startIndex].timestamp!
-                startDate = resetTime(date: startDate)
-                elapsedDay = Int64(resetTime(date: Date()).timeIntervalSince(startDate) / 86400)
+                elapsedDay = getElapsedDay()
             }
             newItem.timestamp = Date()
             newItem.elapsedDay = elapsedDay
@@ -82,7 +91,31 @@ struct DayButtonView: View {
             }
         }
     }
+    
+    private func deleteLastItem() {
+        //素早く押すと余分にデータが削除されてしまうため、ここにも記載
+        if items.count != 0{
+            let lastDate = items[items.endIndex - 1].timestamp!
+            let calendar = Calendar(identifier: .gregorian)
+            let diff = calendar.dateComponents([.hour], from: lastDate, to: Date()).hour!
+            if diff >= 1{
+                return
+            }
+        }
+        
+        withAnimation {
+            let context = viewContext
+            context.delete(items[items.endIndex - 1])
+            do {
+                try viewContext.save()
+            } catch {
+                let nsError = error as NSError
+                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            }
+        }
+    }
 
+    //後々消す(代わりに全データ削除機能を実装する)
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             offsets.map { items[$0] }.forEach(viewContext.delete)
@@ -117,6 +150,13 @@ struct DayButtonView: View {
 
         return calendar.date(from: components)!
     }
+    
+    func getElapsedDay() -> Int64{
+        var startDate = items[items.startIndex].timestamp!
+        startDate = resetTime(date: startDate)
+        let elapsedDay = Int64(resetTime(date: Date()).timeIntervalSince(startDate) / 86400)
+        return elapsedDay
+    }
 }
 
 private let itemFormatter: DateFormatter = {
@@ -128,6 +168,6 @@ private let itemFormatter: DateFormatter = {
 
 struct DayButtonView_Previews: PreviewProvider {
     static var previews: some View {
-        DayButtonView().preferredColorScheme(.dark).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        DayButtonView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }
