@@ -12,11 +12,6 @@ import CoreData
 struct CalendarView:View {
     var body: some View{
         VStack{
-            List {
-                ForEach(items) { item in
-                    Text("Item at \(item.elapsedDay)\n\(item.timestamp!)")
-                }
-            }
             CalendarView_Fix(data: getData(), startDate: getStartDate(), maxElapsedDay: getMaxElapsedDay())
         }
     }
@@ -68,7 +63,7 @@ struct CalendarView:View {
 
 
 struct CalendarView_Fix:View{
-
+    @State var value: ScrollViewProxy?
 
 
     init(data:[Int64?], startDate:Date, maxElapsedDay:Int){
@@ -89,11 +84,22 @@ struct CalendarView_Fix:View{
     let maxElapsedDay:Int
 
     var body: some View{
-        HStack(spacing:2){
-            ForEach(startWeekOfYear..<maxWeekOfYear + 1){ w in
-                let datas = GetWeekData(w:w)
-                let Idx = CheckIndex(w:w)
-                WeekView(startIdx: Idx.startIdx, endIdx: Idx.endIdx, datas: datas)
+        ScrollView(.horizontal, showsIndicators: true){
+            ScrollViewReader{ value in
+                HStack(spacing:2){
+                    Spacer(minLength: UIScreen.main.bounds.width / 2 - 20)
+                    ForEach(startWeekOfYear..<maxWeekOfYear + 1){ w in
+                        let datas = GetWeekData(w:w)
+                        let Idx = CheckIndex(w:w)
+                        WeekView(startIdx: Idx.startIdx, endIdx: Idx.endIdx, datas: datas).id(w)
+                    }
+                    Spacer(minLength: UIScreen.main.bounds.width / 2 - 20).id(0)
+                }.onAppear{
+                    self.value = value
+                    
+                        //何週間かで条件分岐させる
+                    self.value?.scrollTo(maxWeekOfYear, anchor: .center)
+                }
             }
         }
     }
