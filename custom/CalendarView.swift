@@ -113,7 +113,7 @@ struct CalendarView_Fix:View{
             setComp.weekday = weekday
             if let date = calendar.date(from: setComp){
                 let elapsed = calendar.dateComponents([.day], from: startDate, to: date).day!
-                if maxElapsedDay >= elapsed{
+                if elapsed <= maxElapsedDay{
                     if (data.first(where: {$0 ?? 0 == elapsed}) != nil){
                         weekData.append(1)
                     }else{
@@ -124,7 +124,6 @@ struct CalendarView_Fix:View{
                 }
             }
         }
-
         return weekData
     }
 
@@ -134,7 +133,7 @@ struct CalendarView_Fix:View{
         if(w == startWeekOfYear){
             start = calendar.component(.weekday, from: startDate) - 1
         }
-        if(w == (maxWeekOfYear - 1)){
+        if(w == (maxWeekOfYear)){
             end = calendar.component(.weekday, from: Date()) - 1
         }
         return(start,end)
@@ -196,11 +195,5 @@ struct CellColorModifier:ViewModifier {
 
 struct Previews: PreviewProvider {
     static var previews: some View {
-        CalendarView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
-//        WeekView(startIdx: 4, endIdx: 6, datas: [Int?](repeating: 0, count: 7))
-//        MonthView(yyyy: 2021, startMonth: 3, MM: 3, data: [
-//            kari_no_data(elapsedDay: 0),
-//            kari_no_data(elapsedDay: 4)
-//        ], maxElapsedDay: 4)
-    }
+        CalendarView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)    }
 }
